@@ -1,6 +1,6 @@
 init:
   image:
-    repository: alpine
+    repository: registry.icp.com:5000/library/base/alpine
     tag: 3.6
     pullPolicy: IfNotPresent
 
@@ -8,15 +8,15 @@ keycloak:
   replicas: 1
 
   image:
-    repository: jboss/keycloak
+    repository: registry.icp.com:5000/library/jboss/keycloak
     tag: 3.4.3.Final
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
     ##
-    # pullSecrets:
-    #   - myRegistrKeySecretName
+    pullSecrets:
+      - registry.icp.com
 
   securityContext:
     runAsUser: 1000
@@ -31,7 +31,7 @@ keycloak:
 
   ## Password for the initial Keycloak admin user
   ## If not set, a random 10 characters password will be used
-  password: ""
+  password: "123456a?"
 
   ## Allows the specification of additional environment variables for Keycloak
   extraEnv: {}
@@ -161,7 +161,7 @@ keycloak:
   ## Persistence configuration
   persistence:
     # If true, the Postgres chart is deployed
-    deployPostgres: true
+    deployPostgres: false
 
     ## The following values only apply if "deployPostgres" is set to "false"
 
@@ -171,16 +171,16 @@ keycloak:
     # The key in the existing secret that stores the password
     existingSecretKey: password
 
-    # The database vendor. Can be either "POSTGRES" or "MYSQL"
-    dbVendor: H2
+    # The database vendor. Can be either "POSTGRES" or "MYSQL" or "H2"
+    dbVendor: MYSQL
 
     dbName: keycloak
-    dbHost: mykeycloak
-    dbPort: 5432
-    dbUser: keycloak
+    dbHost: trident-mysql
+    dbPort: 3306
+    dbUser: root
 
     # Only used if no existing secret is specified. In this case a new secret is created
-    dbPassword: keycloak
+    dbPassword: 123456aB
 
 postgresql:
   ### PostgreSQL User to create.
